@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+1)     <title><?php bloginfo('name'); wp_title(); ?></title>
+2)    <link rel="stylesheet" href="<?php bloginfo(stylesheet_url) ?>">
+</head>
+<body>
+<!--ссылка на главную-->
+    <a href="<?php echo home_url() ?>">23</a>
+
+<!--ссылка в корень шаблона-->  
+    <?php bloginfo(template_url) ?>
+
+<!--заголовок последнего топика в блоге-->
+    <?php the_title()?> 
+
+<!--контент последнего топика в блоге, вне цыкла не выводится-->
+     <?php the_content()?> 
+     
+<!--loop стандартный цикл вывода постов-->
+     <?php if ( have_posts() ) : while (have_posts() ) : the_post(); ?>
+    <h3><?php the_title() ?></h3>
+    <?php the_excerpt() ?>
+    <a href="<?php the_permalink() ?>">Читать далее</a>
+     <?php endwhile; ?>
+     <!--post navigation-->
+     <?php else: ?>
+     <!--no posts found-->
+     <?php endif; ?>
+     <hr>
+ 
+<!--вывод развернутой инфы о ласт посте-->
+     <?php var_dump($post); ?> <br>          
+                            
+<!--вывод последнего поста без цикла, инфа выше-->
+    <h2><?php echo $post->post_title ?> </h2>  
+     <?php echo $post->post_content ?> <br>
+     <p>Comments: <?php echo $post->comment_count ?> </p>
+     <p>Date: <?php echo $post->post_date ?></p>
+
+ <!--вывод развернутой инфы о ласт постах (к-во в админке)-->
+     <?php var_dump($posts); ?> <br>    
+     
+<!--кастомный цикл вывода постов-->
+    <?php foreach($posts as $item_post): ?>
+        <h4><?php echo $item_post->post_title ?></h4>
+        <?php echo $item_post->post_content ?>
+        <p>Date:<?php echo $item_post->post_date ?></p>
+    <?php endforeach; ?> <br><br><br>
+	
+3) <!-- вызов частей кода на главной (новые файлы) -->
+<?php get_header() ?>
+<?php get_sidebar() ?>
+<?php get_footer() ?>
+    
+4) <!-- вызов места под админбар (перед </head>) -->   
+<?php wp_head() ?>
+<!-- вызов админбара (перед </body>) -->   
+<?php wp_footer() ?>
+
+5) <!-- корректное подключение скриптов и стилей (в отдельном файле functions.php) -->
+<?php 
+/**
+* загружаемые стили и скрипты
+**/
+function load_style_script() {
+    wp_enqueue_script('js-file', get_template_directory_uri() . '/js/js-file.js');
+    wp_enqueue_style('style', get_template_directory_uri() . '/style.css');
+}
+/**
+* загружаем стили и скритпы
+**/
+add_action('wp_enqueue_scripts', 'load_style_script');
+?>
+
+6) <!--Теги-->
+<?php the_tags() ?>
+
+
+    
+    
+    
+    
+    
+    
+      
+     
+</body>
+</html>
